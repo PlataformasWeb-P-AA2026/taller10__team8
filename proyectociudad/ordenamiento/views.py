@@ -1,17 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Sum
 from .models import Parroquia, Barrio
 from .forms import ParroquiaForm, BarrioForm
 
 
 def _menu_links():
     return [
-        {'url': 'ordenamiento:parroquias_list', 'label': 'Listar Parroquias'},
-        {'url': 'ordenamiento:barrios_list', 'label': 'Listar Barrios'},
-        {'url': 'ordenamiento:parroquia_create', 'label': 'Crear Parroquia'},
-        {'url': 'ordenamiento:barrio_create', 'label': 'Crear Barrio'},
+        {'url': 'ordenamiento:parroquias_list', 'label': '[ Parroquias ]  '},
+        {'url': 'ordenamiento:barrios_list', 'label': '[ Barrios ]  '},
+        {'url': 'ordenamiento:parroquia_create', 'label': '[ + Parroquia ]'},
+        {'url': 'ordenamiento:barrio_create', 'label': '[ + Barrio ]'},
     ]
-
 def parroquias_list(request):
     parroquias = Parroquia.objects.all()
     parroquia_data = []
