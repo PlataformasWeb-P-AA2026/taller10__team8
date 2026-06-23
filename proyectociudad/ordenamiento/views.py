@@ -12,32 +12,37 @@ def _menu_links():
         {'url': 'ordenamiento:barrio_create', 'label': 'Crear Barrio'},
     ]
 
-
 def parroquias_list(request):
     parroquias = Parroquia.objects.all()
     parroquia_data = []
     for parroquia in parroquias:
-        barrios = Barrio.objects.filter(parroquia=parroquia).select_related('parroquia')
+        barrios =Barrio.objects.filter(parroquia=parroquia)
         barrio_data = []
+        numero_parques = 0
         for barrio in barrios:
-            presidente = getattr(barrio, 'presidentebarrio', None)
-            barrio_data.append({
+            try:
+                presidente = barrio.presidentebarrio
+            except:
+                presidente = None
+            # Sumar parques 
+            numero_parques = numero_parques + barrio.numero_parques
+            barrio_info = {
                 'barrio': barrio,
                 'presidente': presidente,
-            })
-        numero_parques = barrios.aggregate(total=Sum('numero_parques'))['total'] or 0
-        parroquia_data.append({
+            }
+            barrio_data.append(barrio_info)
+        parroquia_info = {
             'parroquia': parroquia,
             'barrios': barrio_data,
-            'numero_parques': numero_parques,
-        })
-
+            'numero_parques': numero_parques,}
+        parroquia_data.append(parroquia_info)
     context = {
         'parroquia_data': parroquia_data,
-        'menu_links': _menu_links(),
-    }
-    return render(request, 'ordenamiento/parroquias_list.html', context)
-
+        'menu_links': _menu_links()}
+    return render(
+        request,
+        'ordenamiento/parroquias_list.html',
+        context)
 
 def barrios_list(request):
     barrios = Barrio.objects.select_related('parroquia').all()
@@ -56,11 +61,12 @@ def parroquia_create(request):
             return redirect('ordenamiento:parroquias_list')
     else:
         form = ParroquiaForm()
-    return render(request, 'ordenamiento/parroquia_form.html', {
-        'form': form,
-        'menu_links': _menu_links(),
-        'title': 'Crear Parroquia',
-    })
+        data={
+            'form': form,
+            'menu_links': _menu_links(),
+            'title': 'Crear Parroquia',
+        }
+    return render(request, 'ordenamiento/parroquia_form.html', data)
 
 
 def parroquia_edit(request, pk):
@@ -72,11 +78,12 @@ def parroquia_edit(request, pk):
             return redirect('ordenamiento:parroquias_list')
     else:
         form = ParroquiaForm(instance=parroquia)
-    return render(request, 'ordenamiento/parroquia_form.html', {
-        'form': form,
-        'menu_links': _menu_links(),
-        'title': 'Editar Parroquia',
-    })
+        data ={
+            'form': form,
+            'menu_links': _menu_links(),
+            'title': 'Editar Parroquia'
+        }
+    return render(request, 'ordenamiento/parroquia_form.html', data)
 
 
 def barrio_create(request):
@@ -87,11 +94,12 @@ def barrio_create(request):
             return redirect('ordenamiento:barrios_list')
     else:
         form = BarrioForm()
-    return render(request, 'ordenamiento/barrio_form.html', {
-        'form': form,
-        'menu_links': _menu_links(),
-        'title': 'Crear Barrio',
-    })
+        data ={
+            'form': form,
+            'menu_links': _menu_links(),
+            'title': 'Crear Barrio'
+        }
+    return render(request, 'ordenamiento/barrio_form.html', data)
 
 
 def barrio_edit(request, pk):
@@ -103,8 +111,9 @@ def barrio_edit(request, pk):
             return redirect('ordenamiento:barrios_list')
     else:
         form = BarrioForm(instance=barrio)
-    return render(request, 'ordenamiento/barrio_form.html', {
-        'form': form,
-        'menu_links': _menu_links(),
-        'title': 'Editar Barrio',
-    })
+        data={
+            'form': form,
+            'menu_links': _menu_links(),
+            'title': 'Editar Barrio',
+        }
+    return render(request, 'ordenamiento/barrio_form.html', data)
