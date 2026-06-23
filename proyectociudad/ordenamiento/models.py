@@ -58,7 +58,7 @@ class Barrio(models.Model):
     )
 
     def __str__(self):
-        return self.nombre
+        return f"{self.nombre} ({self.parroquia})"
 
 
 class PresidenteBarrio(models.Model):
@@ -77,4 +77,4 @@ class PresidenteBarrio(models.Model):
     )
 
     def __str__(self):
-        return self.nickname
+        return f"{self.nickname} ({self.profesion})"

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body style="text-align:left;">
+    <nav>
+        {% for link in menu_links %}
+            <a href="{% url link.url %}">{{ link.label }}</a>
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
+    </nav>
+
+    <h1>{{ title }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

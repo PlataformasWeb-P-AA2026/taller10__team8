@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Parroquias</title>
+</head>
+<body>
+    <nav>
+        {% for link in menu_links %}
+            <a href="{% url link.url %}">{{ link.label }}</a>
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
+    </nav>
+
+    <h1>Parroquias</h1>
+
+    {% for item in parroquia_data %}
+        <section>
+            <h2>{{ item.parroquia.nombre }}</h2>
+            <p>Ubicación: {{ item.parroquia.ubicacion }}</p>
+            <p>Tipo: {{ item.parroquia.tipo }}</p>
+            <p>Número total de parques: {{ item.numero_parques }}</p>
+            <p><a href="{% url 'ordenamiento:parroquia_edit' item.parroquia.pk %}">Editar parroquia</a></p>
+            <h3>Barrios</h3>
+            {% if item.barrios %}
+                <ul>
+                    {% for entry in item.barrios %}
+                        <li>
+                            <strong>{{ entry.barrio }}</strong>
+                            <p>Viviendas: {{ entry.barrio.numero_viviendas }}</p>
+                            <p>Parques: {{ entry.barrio.numero_parques }}</p>
+                            <p>Edificios residenciales: {{ entry.barrio.numero_edificios_residenciales }}</p>
+                            <p>Presidente: {{ entry.presidente }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay barrios registrados en esta parroquia.</p>
+            {% endif %}
+        </section>
+    {% empty %}
+        <p>No se encuentran parroquias.</p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Barrios</title>
+</head>
+<body>
+    <nav>
+        {% for link in menu_links %}
+            <a href="{% url link.url %}">{{ link.label }}</a>
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
+    </nav>
+
+    <h1>Barrios</h1>
+
+    {% if barrios %}
+        <ul>
+            {% for barrio in barrios %}
+                <li>
+                    <strong>{{ barrio }}</strong>
+                    <p>Parroquia: {{ barrio.parroquia }}</p>
+                    <p>Viviendas: {{ barrio.numero_viviendas }}</p>
+                    <p>Parques: {{ barrio.numero_parques }}</p>
+                    <p>Edificios residenciales: {{ barrio.numero_edificios_residenciales }}</p>
+                    <p><a href="{% url 'ordenamiento:barrio_edit' barrio.pk %}">Editar</a></p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay barrios registrados.</p>
+    {% endif %}
+</body>
+</html>
